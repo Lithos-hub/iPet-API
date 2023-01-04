@@ -1,7 +1,6 @@
 export interface File {
-  fileName: string;
+  name: string;
   path: string;
-  idUser: string;
   mimeType: string;
   size: number;
 }

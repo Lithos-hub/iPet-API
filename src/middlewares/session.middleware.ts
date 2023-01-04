@@ -5,14 +5,14 @@ import { verifyToken } from "../utils/jwt.handle";
 
 const checkJwt = (req: ExtendedRequest, res: Response, next: NextFunction) => {
   try {
-    if (!req.headers.authorization) {
+    const token = req.headers["x-token"] || "";
+
+    if (!token) {
       handleHttp(res, "NOT_TOKEN", 401);
       return;
     }
-    const jwtByUser = req.headers.authorization || "";
-    const token = jwtByUser.split(" ").pop(); // => remove 'bearer' from the token string
     const dataToken = verifyToken(String(token)) as { _id: string };
-
+    console.log("Data token: ", dataToken);
     if (!dataToken._id) {
       handleHttp(res, "ERROR_ID_TOKEN", 401);
       return;

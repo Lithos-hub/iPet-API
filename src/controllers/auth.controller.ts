@@ -3,6 +3,7 @@ import fs from "fs";
 import { registerUser, loginUser } from "../services/auth.service";
 import { getUser } from "../services/users.service";
 import handleHttp from "../utils/error.handle";
+import { genToken } from "../utils/jwt.handle";
 
 const signUp = async ({ body }: Request, res: Response) => {
   const response = await registerUser(body);
@@ -32,7 +33,10 @@ const getSession = async ({ body }: Request, res: Response) => {
   if (response === "NOT_FOUND") {
     handleHttp(res, "Invalid session", 401);
   } else {
-    res.send(response);
+    res.send({
+      user: response,
+      token: genToken(_id),
+    });
   }
 };
 
