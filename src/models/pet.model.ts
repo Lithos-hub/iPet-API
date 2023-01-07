@@ -48,6 +48,11 @@ const PetSchema = new Schema<Pet>(
       type: String,
       trim: true,
     },
+    imageUrl: {
+      required: false,
+      type: String,
+      trim: true,
+    },
   },
   {
     versionKey: false,

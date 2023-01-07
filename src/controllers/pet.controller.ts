@@ -4,10 +4,8 @@ import * as PetService from "../services/pet.service";
 import { ExtendedRequest } from "../interfaces/request.interface";
 
 const createPet = async ({ body, user }: ExtendedRequest, res: Response) => {
-  console.log("Creating pet: ", body, user);
-
   body.userId = user?._id;
-  console.log("Body pet: ", body);
+
   try {
     const response = await PetService.createPet(body);
     res.send(response);
@@ -17,8 +15,9 @@ const createPet = async ({ body, user }: ExtendedRequest, res: Response) => {
 };
 const getPet = async ({ params }: Request, res: Response) => {
   try {
+    console.log("GETTING PET PARAMS: ", params);
     const { _id } = params;
-    const response = await PetService.getPet(_id);
+    const response = await PetService.getPetDetails(_id);
     res.send(response);
   } catch (error) {
     handleHttp(res, "ERROR_GET_PET", 500);

@@ -8,19 +8,17 @@ const createPet = async (data: Pet) => {
   return await PetModel.create(data);
 };
 const getPets = async (userId: string) => {
-  console.log("Searching: ", userId);
-
   return await PetModel.find({ userId });
 };
-const getPet = async (_id: string): Promise<any> => {
+const getPetDetails = async (_id: string): Promise<any> => {
   const response = (await PetModel.findById(_id)) || "NOT_FOUND";
+
   if (response === "NOT_FOUND") return;
   return response;
 };
 const updatePet = async ({ _id, data }: { _id: string; data: Pet }) => {
-  console.log("Updating...", _id, data);
   const petAlreadyExists = await checkPetAlreadyExists(_id);
-  console.log("Pete xists: ", petAlreadyExists);
+
   if (petAlreadyExists) {
     const { _id } = petAlreadyExists;
 
@@ -42,4 +40,4 @@ const updatePet = async ({ _id, data }: { _id: string; data: Pet }) => {
 const deletePet = async (data: { _id: string }) =>
   await PetModel.findOneAndDelete({ ...data });
 
-export { createPet, getPets, getPet, updatePet, deletePet };
+export { createPet, getPets, getPetDetails, updatePet, deletePet };

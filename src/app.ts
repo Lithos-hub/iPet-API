@@ -17,7 +17,7 @@ app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-const PATH_STORAGE = `${process.cwd()}/src/public`;
+const PATH_STORAGE = `${process.cwd()}/public`;
 app.use(express.static(PATH_STORAGE));
 
 // routes

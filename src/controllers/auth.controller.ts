@@ -12,7 +12,7 @@ const signUp = async ({ body }: Request, res: Response) => {
     handleHttp(res, "User already exists", 401);
   } else {
     const { _id } = response.user;
-    const dir = `${process.cwd()}/src/public/${_id}`;
+    const dir = `${process.cwd()}/public/${_id}`;
     if (!fs.existsSync(dir)) fs.mkdirSync(dir);
     res.send(response);
   }

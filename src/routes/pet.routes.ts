@@ -13,7 +13,7 @@ const router = Router();
 
 router.post("/", checkJwt, validateData, createPet);
 router.get("/:userId", checkJwt, getPets);
-router.get("/_id", checkJwt, getPet);
+router.get("/details/:_id", checkJwt, getPet);
 router.put("/:_id", checkJwt, validateData, updatePet);
 router.delete("/:_id", checkJwt, deletePet);
 
