@@ -12,7 +12,6 @@ const checkJwt = (req: ExtendedRequest, res: Response, next: NextFunction) => {
       return;
     }
     const dataToken = verifyToken(String(token)) as { _id: string };
-    console.log("Data token: ", dataToken);
     if (!dataToken._id) {
       handleHttp(res, "ERROR_ID_TOKEN", 401);
       return;

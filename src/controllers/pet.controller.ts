@@ -15,7 +15,6 @@ const createPet = async ({ body, user }: ExtendedRequest, res: Response) => {
 };
 const getPet = async ({ params }: Request, res: Response) => {
   try {
-    console.log("GETTING PET PARAMS: ", params);
     const { _id } = params;
     const response = await PetService.getPetDetails(_id);
     res.send(response);
