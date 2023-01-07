@@ -10,9 +10,9 @@ API for iPet app made with Node.js, TypeScript and MongoDB.
 
 ---
 
-- 🟩 GET /api/v1/pet
-- 🟩 GET /api/v1/pet/details/:id
 - 🟧 POST /api/v1/pet
+- 🟩 GET /api/v1/pet/:userId
+- 🟩 GET /api/v1/pet/details/:id
 - 🟦 PUT /api/v1/pet/:id
 - 🟥 DELETE /api/v1/pet/:id
 
