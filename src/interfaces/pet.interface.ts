@@ -12,4 +12,6 @@ export interface Pet {
   sex: "male" | "female";
   birthday: number; // milliseconds
   imageUrl: string;
+  allergies: string[];
+  spaying_status: boolean;
 }

@@ -7,7 +7,6 @@ export const validateData = [
   check("weight").exists().trim().notEmpty().isNumeric(),
   check("weight_measure").exists().trim().notEmpty(),
   check("specie").exists().trim().notEmpty(),
-  check("breed").exists().trim().notEmpty(),
   check("color").exists().trim().notEmpty(),
   check("sex").exists().trim().notEmpty(),
   check("birthday").exists().notEmpty().isNumeric(),

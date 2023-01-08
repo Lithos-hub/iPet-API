@@ -8,6 +8,7 @@ const createPet = async ({ body, user }: ExtendedRequest, res: Response) => {
 
   try {
     const response = await PetService.createPet(body);
+
     res.send(response);
   } catch (error) {
     handleHttp(res, "ERROR_CREATE_PET", 500);

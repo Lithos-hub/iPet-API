@@ -24,7 +24,7 @@ const PetSchema = new Schema<Pet>(
       trim: true,
     },
     breed: {
-      required: true,
+      required: false,
       type: String,
       trim: true,
     },
@@ -52,6 +52,14 @@ const PetSchema = new Schema<Pet>(
       required: false,
       type: String,
       trim: true,
+    },
+    allergies: {
+      required: false,
+      type: [String],
+    },
+    spaying_status: {
+      required: true,
+      type: Boolean,
     },
   },
   {
