@@ -4,6 +4,7 @@ import morgan from "morgan";
 import cors from "cors";
 import db from "./config/mongo";
 import router from "./routes";
+
 // init
 const app = express();
 db().then(() => "Conexion ready");
