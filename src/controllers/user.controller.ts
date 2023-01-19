@@ -1,22 +1,15 @@
 import { Request, Response } from "express";
 import handleHttp from "../utils/error.handle";
 import * as UserService from "../services/users.service";
+import { ExtendedRequest } from "../interfaces/request.interface";
 
-const getUser = async ({ params }: Request, res: Response) => {
+const getUser = async ({ user }: ExtendedRequest, res: Response) => {
   try {
-    const { id } = params;
-    const response = await UserService.getUser(id);
+    const _id = user?._id;
+    const response = await UserService.getUser(_id);
     res.send(response);
   } catch (error) {
     handleHttp(res, "ERROR_GET_USER", 500);
-  }
-};
-const getUsers = async ({ user }: Request, res: Response) => {
-  try {
-    const response = await UserService.getUsers();
-    res.send({ user, response });
-  } catch (error) {
-    handleHttp(res, "ERROR_GET_USERS", 500);
   }
 };
 const updateUser = async ({ params, body }: Request, res: Response) => {
@@ -35,4 +28,4 @@ const deleteUser = (_: Request, res: Response) => {
   }
 };
 
-export { getUser, getUsers, updateUser, deleteUser };
+export { getUser, updateUser, deleteUser };

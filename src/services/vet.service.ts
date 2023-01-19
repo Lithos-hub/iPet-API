@@ -1,41 +1,78 @@
+import { ObjectId } from "mongodb";
 import { Vet } from "../interfaces/vet.interface";
 import VetModel from "../models/vet.model";
+import UserModel from "../models/user.model";
 
-const checkVetAlreadyExists = async (_id: string) =>
-  await VetModel.findOne({ _id });
-
-const createVet = async (data: Vet) => await VetModel.create(data);
-
-const getVets = async (userId: string) => await VetModel.find({ userId });
-
-const getVetDetails = async (_id: string): Promise<any> => {
-  const response = (await VetModel.findById(_id)) || "NOT_FOUND";
-
-  if (response === "NOT_FOUND") return;
-  return response;
+const createVet = async (_id: ObjectId, data: Vet) => {
+  return await UserModel.findOneAndUpdate(
+    {
+      _id,
+    },
+    {
+      $push: {
+        vets: {
+          ...data,
+          id: new Date().getTime(),
+        },
+      },
+    }
+  );
 };
-const updateVet = async ({ _id, data }: { _id: string; data: Vet }) => {
-  const vetAlreadyExists = await checkVetAlreadyExists(_id);
+
+const getVetDetails = async (id: string): Promise<any> => {
+  await UserModel.findOne(
+    {
+      "vets.id": id,
+    },
+    (err: unknown, docs: unknown) => {
+      if (err) return "NOT_FOUND";
+      return docs;
+    }
+  );
+};
+
+const updateVet = async ({
+  userId,
+  id,
+  data,
+}: {
+  userId: string;
+  id: string;
+  data: Vet[];
+}) => {
+  const vetAlreadyExists = await UserModel.findOne({
+    _id: userId,
+    "vets.id": id,
+  });
 
   if (vetAlreadyExists) {
     const { _id } = vetAlreadyExists;
 
-    return await VetModel.findByIdAndUpdate(
+    return await UserModel.updateOne(
       {
         _id,
       },
       {
-        ...data,
+        $set: [...data],
       },
       {
-        new: true,
+        upsert: true,
       }
     );
   } else {
-    return "PET_NOT_FOUND";
+    return "VET_NOT_FOUND";
   }
 };
-const deleteVet = async (data: { _id: string }) =>
-  await VetModel.findOneAndDelete({ ...data });
-
-export { createVet, getVets, getVetDetails, updateVet, deleteVet };
+const deleteVet = async ({ userId, id }: { userId: string; id: string }) => {
+  return await UserModel.findOneAndUpdate(
+    {
+      _id: userId,
+    },
+    {
+      $pull: {
+        vets: { id },
+      },
+    }
+  );
+};
+export { createVet, getVetDetails, updateVet, deleteVet };

@@ -3,17 +3,6 @@ import handleHttp from "../utils/error.handle";
 import * as PetService from "../services/pet.service";
 import { ExtendedRequest } from "../interfaces/request.interface";
 
-const createPet = async ({ body, user }: ExtendedRequest, res: Response) => {
-  body.userId = user?._id;
-
-  try {
-    const response = await PetService.createPet(body);
-
-    res.send(response);
-  } catch (error) {
-    handleHttp(res, "ERROR_CREATE_PET", 500);
-  }
-};
 const getPet = async ({ params }: Request, res: Response) => {
   try {
     const { _id } = params;
@@ -23,34 +12,38 @@ const getPet = async ({ params }: Request, res: Response) => {
     handleHttp(res, "ERROR_GET_PET", 500);
   }
 };
-const getPets = async ({ params }: Request, res: Response) => {
+const createPet = async ({ body, user }: ExtendedRequest, res: Response) => {
+  const id = user?._id;
   try {
-    const { userId } = params; // => User ID
-    const response = await PetService.getPets(userId);
+    const response = await PetService.createPet(id, body);
+
     res.send(response);
   } catch (error) {
-    handleHttp(res, "ERROR_GET_PETS", 500);
+    handleHttp(res, "ERROR_CREATE_PET", 500);
   }
 };
-const updatePet = async ({ params, body }: ExtendedRequest, res: Response) => {
+const updatePet = async (
+  { user, params, body }: ExtendedRequest,
+  res: Response
+) => {
   try {
-    const { _id } = params;
-    const response = await PetService.updatePet({ _id, data: body });
+    const userId = user?._id;
+    const { id } = params;
+    const response = await PetService.updatePet({ userId, id, data: body });
     res.send(response);
   } catch (error) {
     handleHttp(res, "ERROR_PUT_PETS", 500);
   }
 };
-const deletePet = async ({ params }: Request, res: Response) => {
+const deletePet = async ({ user, params }: ExtendedRequest, res: Response) => {
   try {
-    const { _id } = params;
-    const response = await PetService.deletePet({
-      _id,
-    });
+    const userId = user?._id;
+    const { id } = params;
+    const response = await PetService.deletePet({ userId, id });
     res.send(response);
   } catch (error) {
-    handleHttp(res, "ERROR_DELETE_PETS", 500);
+    handleHttp(res, "ERROR_DELETE_VETS", 500);
   }
 };
 
-export { createPet, getPet, getPets, updatePet, deletePet };
+export { createPet, getPet, updatePet, deletePet };

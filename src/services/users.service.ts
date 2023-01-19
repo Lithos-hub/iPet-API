@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import { User } from "../interfaces/user.interface";
 import UserModel from "../models/user.model";
 import { encrypt } from "../utils/bcrypt.handle";
@@ -6,22 +7,16 @@ import { genToken } from "../utils/jwt.handle";
 const checkUserAlreadyExists = async (_id: string) =>
   await UserModel.findOne({ _id });
 
-const getUsers = async () => {
-  const response = await UserModel.find({});
-  return response.map(({ _id }) => {
-    return {
-      _id,
-    };
-  });
-};
-const getUser = async (_id: string): Promise<any> => {
+const getUser = async (_id: ObjectId): Promise<any> => {
   const response = (await UserModel.findById(_id)) || "NOT_FOUND";
   if (response !== "NOT_FOUND") {
-    const { _id, createdAt, email } = response;
+    const { _id, createdAt, email, pets, vets } = response;
     return {
       _id,
       createdAt,
       email,
+      pets,
+      vets,
     };
   }
 };
@@ -67,4 +62,4 @@ const updateUser = async (id: string, data: User) => {
 };
 const deleteUser = async (id: string) => await UserModel.findByIdAndDelete(id);
 
-export { getUsers, getUser, updateUser, deleteUser };
+export { getUser, updateUser, deleteUser };
