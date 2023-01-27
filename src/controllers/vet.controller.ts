@@ -10,7 +10,7 @@ const createVet = async ({ body, user }: ExtendedRequest, res: Response) => {
 
     res.send(response);
   } catch (error) {
-    handleHttp(res, "ERROR_CREATE_PET", 500);
+    handleHttp(res, "ERROR_CREATE_VET", 500);
   }
 };
 const updateVet = async (
@@ -20,20 +20,26 @@ const updateVet = async (
   try {
     const userId = user?._id;
     const { id } = params;
-    const response = await VetService.updateVet({ userId, id, data: body });
+    const vetId = Number(id);
+    const response = await VetService.updateVet({
+      userId,
+      id: vetId,
+      data: body,
+    });
     res.send(response);
   } catch (error) {
-    handleHttp(res, "ERROR_PUT_VETS", 500);
+    handleHttp(res, "ERROR_PUT_VET", 500);
   }
 };
 const deleteVet = async ({ user, params }: ExtendedRequest, res: Response) => {
   try {
     const userId = user?._id;
     const { id } = params;
-    const response = await VetService.deleteVet({ userId, id });
+    const vetId = Number(id);
+    const response = await VetService.deleteVet({ userId, id: vetId });
     res.send(response);
   } catch (error) {
-    handleHttp(res, "ERROR_DELETE_VETS", 500);
+    handleHttp(res, "ERROR_DELETE_VET", 500);
   }
 };
 

@@ -19,7 +19,13 @@ const createPet = async (_id: ObjectId, data: Pet) => {
   );
 };
 
-const getPetDetails = async (id: string): Promise<any> => {
+const getPetDetails = async ({
+  userId,
+  id,
+}: {
+  userId: string;
+  id: number;
+}): Promise<any> => {
   await UserModel.findOne(
     {
       "pets.id": id,
@@ -37,8 +43,8 @@ const updatePet = async ({
   data,
 }: {
   userId: string;
-  id: string;
-  data: Pet[];
+  id: number;
+  data: Pet;
 }) => {
   const petAlreadyExists = await UserModel.findOne({
     _id: userId,
@@ -48,30 +54,37 @@ const updatePet = async ({
   if (petAlreadyExists) {
     const { _id } = petAlreadyExists;
 
-    return await UserModel.updateOne(
+    return await UserModel.findOneAndUpdate(
       {
         _id,
       },
       {
-        $set: [...data],
+        $set: {
+          pets: data,
+        },
       },
       {
         upsert: true,
+        new: true,
       }
     );
   } else {
     return "PET_NOT_FOUND";
   }
 };
-const deletePet = async ({ userId, id }: { userId: string; id: string }) => {
-  return await UserModel.findOneAndUpdate(
+const deletePet = async ({ userId, id }: { userId: string; id: number }) => {
+  return await UserModel.updateOne(
     {
       _id: userId,
     },
     {
       $pull: {
-        vets: { id },
+        pets: { id },
       },
+    },
+    {
+      upsert: true,
+      new: true,
     }
   );
 };

@@ -10,6 +10,12 @@ import {
 
 import { createPet, updatePet, deletePet } from "../controllers/pet.controller";
 import { createVet, updateVet, deleteVet } from "../controllers/vet.controller";
+import {
+  createContact,
+  updateContact,
+  deleteContact,
+} from "../controllers/contact.controller";
+import { validateContactData } from "../validators/contact.validator";
 
 const router = Router();
 
@@ -34,9 +40,9 @@ router.put("/vet/:id", checkJwt, updateVet);
 router.delete("/vet/:id", checkJwt, deleteVet);
 
 // user/contact CRUD
-router.post("/contact/", checkJwt);
-router.put("/contact/:id", checkJwt);
-router.delete("/contact/:id", checkJwt);
+router.post("/contact/", checkJwt, validateContactData, createContact);
+router.put("/contact/:id", checkJwt, updateContact);
+router.delete("/contact/:id", checkJwt, deleteContact);
 
 // user/note CRUD
 router.post("/note/", checkJwt);

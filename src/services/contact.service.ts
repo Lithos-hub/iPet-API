@@ -1,15 +1,16 @@
 import { ObjectId } from "mongodb";
-import { Vet } from "../interfaces/vet.interface";
+import { Contact } from "../interfaces/contact.interface";
+import ContactModel from "../models/contact.model";
 import UserModel from "../models/user.model";
 
-const createVet = async (_id: ObjectId, data: Vet) => {
+const createContact = async (_id: ObjectId, data: Contact) => {
   return await UserModel.findOneAndUpdate(
     {
       _id,
     },
     {
       $push: {
-        vets: {
+        contacts: {
           ...data,
           id: new Date().getTime(),
         },
@@ -18,10 +19,10 @@ const createVet = async (_id: ObjectId, data: Vet) => {
   );
 };
 
-const getVetDetails = async (id: string): Promise<any> => {
+const getContactDetails = async (id: string): Promise<any> => {
   await UserModel.findOne(
     {
-      "vets.id": id,
+      "contacts.id": id,
     },
     (err: unknown, docs: unknown) => {
       if (err) return "NOT_FOUND";
@@ -30,22 +31,22 @@ const getVetDetails = async (id: string): Promise<any> => {
   );
 };
 
-const updateVet = async ({
+const updateContact = async ({
   userId,
   id,
   data,
 }: {
   userId: string;
   id: number;
-  data: Vet[];
+  data: Contact[];
 }) => {
-  const vetAlreadyExists = await UserModel.findOne({
+  const contactAlreadyExists = await UserModel.findOne({
     _id: userId,
-    "vets.id": id,
+    "contacts.id": id,
   });
 
-  if (vetAlreadyExists) {
-    const { _id } = vetAlreadyExists;
+  if (contactAlreadyExists) {
+    const { _id } = contactAlreadyExists;
 
     return await UserModel.updateOne(
       {
@@ -53,7 +54,7 @@ const updateVet = async ({
       },
       {
         $set: {
-          vets: data,
+          contacts: data,
         },
       },
       {
@@ -65,14 +66,20 @@ const updateVet = async ({
     return "VET_NOT_FOUND";
   }
 };
-const deleteVet = async ({ userId, id }: { userId: string; id: number }) => {
+const deleteContact = async ({
+  userId,
+  id,
+}: {
+  userId: string;
+  id: number;
+}) => {
   return await UserModel.updateOne(
     {
       _id: userId,
     },
     {
       $pull: {
-        vets: { id },
+        contacts: { id },
       },
     },
     {
@@ -81,4 +88,4 @@ const deleteVet = async ({ userId, id }: { userId: string; id: number }) => {
     }
   );
 };
-export { createVet, getVetDetails, updateVet, deleteVet };
+export { createContact, getContactDetails, updateContact, deleteContact };

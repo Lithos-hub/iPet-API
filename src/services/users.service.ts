@@ -10,13 +10,15 @@ const checkUserAlreadyExists = async (_id: string) =>
 const getUser = async (_id: ObjectId): Promise<any> => {
   const response = (await UserModel.findById(_id)) || "NOT_FOUND";
   if (response !== "NOT_FOUND") {
-    const { _id, createdAt, email, pets, vets } = response;
+    const { _id, createdAt, email, pets, vets, contacts, notes } = response;
     return {
       _id,
       createdAt,
       email,
       pets,
       vets,
+      contacts,
+      notes,
     };
   }
 };

@@ -27,11 +27,11 @@ const UserSchema = new Schema<User, Model<User>>(
       required: true,
       type: [Object],
     },
-    notes: {
+    contacts: {
       required: true,
       type: [Object],
     },
-    contacts: {
+    notes: {
       required: true,
       type: [Object],
     },
