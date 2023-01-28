@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { checkJwt } from "../middlewares/session.middleware";
-import { validateVetData } from "../validators/vet.validator";
 
 import {
   getUser,
@@ -15,7 +14,15 @@ import {
   updateContact,
   deleteContact,
 } from "../controllers/contact.controller";
+import {
+  createNote,
+  updateNote,
+  deleteNote,
+} from "../controllers/note.controller";
+
+import { validateVetData } from "../validators/vet.validator";
 import { validateContactData } from "../validators/contact.validator";
+import { validateNoteData } from "../validators/note.validator";
 
 const router = Router();
 
@@ -45,8 +52,8 @@ router.put("/contact/:id", checkJwt, updateContact);
 router.delete("/contact/:id", checkJwt, deleteContact);
 
 // user/note CRUD
-router.post("/note/", checkJwt);
-router.put("/note/:id", checkJwt);
-router.delete("/note/:id", checkJwt);
+router.post("/note/", checkJwt, validateNoteData, createNote);
+router.put("/note/:id", checkJwt, updateNote);
+router.delete("/note/:id", checkJwt, deleteNote);
 
 export { router };

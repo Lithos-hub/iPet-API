@@ -1,15 +1,16 @@
 import { ObjectId } from "mongodb";
-import { Vet } from "../interfaces/vet.interface";
+import { Note } from "../interfaces/note.interface";
+import NoteModel from "../models/note.model";
 import UserModel from "../models/user.model";
 
-const createVet = async (_id: ObjectId, data: Vet) => {
+const createNote = async (_id: ObjectId, data: Note) => {
   return await UserModel.findOneAndUpdate(
     {
       _id,
     },
     {
       $push: {
-        vets: {
+        notes: {
           ...data,
           id: new Date().getTime(),
         },
@@ -18,10 +19,10 @@ const createVet = async (_id: ObjectId, data: Vet) => {
   );
 };
 
-const getVetDetails = async (id: string): Promise<any> => {
+const getNoteDetails = async (id: string): Promise<any> => {
   await UserModel.findOne(
     {
-      "vets.id": id,
+      "notes.id": id,
     },
     (err: unknown, docs: unknown) => {
       if (err) return "NOT_FOUND";
@@ -30,34 +31,30 @@ const getVetDetails = async (id: string): Promise<any> => {
   );
 };
 
-const updateVet = async ({
+const updateNote = async ({
   userId,
   id,
   data,
 }: {
   userId: string;
   id: number;
-  data: Vet;
+  data: Note;
 }) => {
-  const vetAlreadyExists = await UserModel.findOne({
+  const noteAlreadyExists = await UserModel.findOne({
     _id: userId,
-    "vets.id": id,
+    "notes.id": id,
   });
 
-  if (vetAlreadyExists) {
-    const { _id } = vetAlreadyExists;
+  if (noteAlreadyExists) {
+    const { _id } = noteAlreadyExists;
 
     return await UserModel.updateOne(
       {
         _id,
-        "vets.id": id,
       },
       {
         $set: {
-          "vets.$.name": data.name,
-          "vets.$.contact_phone": data.contact_phone,
-          "vets.$.emergency_phone": data.emergency_phone,
-          "vets.$.city": data.city,
+          "notes.$.description": data.description,
         },
       },
       {
@@ -66,17 +63,17 @@ const updateVet = async ({
       }
     );
   } else {
-    return "VET_NOT_FOUND";
+    return "NOTE_NOT_FOUND";
   }
 };
-const deleteVet = async ({ userId, id }: { userId: string; id: number }) => {
+const deleteNote = async ({ userId, id }: { userId: string; id: number }) => {
   return await UserModel.updateOne(
     {
       _id: userId,
     },
     {
       $pull: {
-        vets: { id },
+        notes: { id },
       },
     },
     {
@@ -85,4 +82,4 @@ const deleteVet = async ({ userId, id }: { userId: string; id: number }) => {
     }
   );
 };
-export { createVet, getVetDetails, updateVet, deleteVet };
+export { createNote, getNoteDetails, updateNote, deleteNote };

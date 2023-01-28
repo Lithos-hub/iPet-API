@@ -38,7 +38,7 @@ const updateContact = async ({
 }: {
   userId: string;
   id: number;
-  data: Contact[];
+  data: Contact;
 }) => {
   const contactAlreadyExists = await UserModel.findOne({
     _id: userId,
@@ -51,10 +51,15 @@ const updateContact = async ({
     return await UserModel.updateOne(
       {
         _id,
+        "contacts.id": id,
       },
       {
         $set: {
-          contacts: data,
+          "contacts.$.name": data.name,
+          "contacts.$.contact_phone": data.contact_phone,
+          "contacts.$.contact_phone_2": data.contact_phone_2,
+          "contacts.$.city": data.city,
+          "contacts.$.email": data.email,
         },
       },
       {
@@ -63,7 +68,7 @@ const updateContact = async ({
       }
     );
   } else {
-    return "VET_NOT_FOUND";
+    return "CONTACT_NOT_FOUND";
   }
 };
 const deleteContact = async ({
