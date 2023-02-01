@@ -1,14 +1,13 @@
 import { Router } from "express";
 import { checkJwt } from "../middlewares/session.middleware";
 
+import { createPet, updatePet, deletePet } from "../controllers/pet.controller";
+import { createVet, updateVet, deleteVet } from "../controllers/vet.controller";
 import {
   getUser,
   updateUser,
   deleteUser,
 } from "../controllers/user.controller";
-
-import { createPet, updatePet, deletePet } from "../controllers/pet.controller";
-import { createVet, updateVet, deleteVet } from "../controllers/vet.controller";
 import {
   createContact,
   updateContact,
@@ -19,10 +18,16 @@ import {
   updateNote,
   deleteNote,
 } from "../controllers/note.controller";
+import {
+  createEvent,
+  updateEvent,
+  deleteEvent,
+} from "../controllers/event.controller";
 
 import { validateVetData } from "../validators/vet.validator";
 import { validateContactData } from "../validators/contact.validator";
 import { validateNoteData } from "../validators/note.validator";
+import { validateEventData } from "../validators/event.validator";
 
 const router = Router();
 
@@ -37,9 +42,9 @@ router.put("/pet/:id", checkJwt, updatePet);
 router.delete("/pet/:id", checkJwt, deletePet);
 
 // user/event CRUD
-router.post("/event/", checkJwt);
-router.put("/event/:id", checkJwt);
-router.delete("/event/:id", checkJwt);
+router.post("/event/", checkJwt, validateEventData, createEvent);
+router.put("/event/:id", checkJwt, updateEvent);
+router.delete("/event/:id", checkJwt, deleteEvent);
 
 // user/vet CRUD
 router.post("/vet/", checkJwt, validateVetData, createVet);

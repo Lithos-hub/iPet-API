@@ -1,6 +1,5 @@
 import { ObjectId } from "mongodb";
 import { Note } from "../interfaces/note.interface";
-import NoteModel from "../models/note.model";
 import UserModel from "../models/user.model";
 
 const createNote = async (_id: ObjectId, data: Note) => {
@@ -48,13 +47,15 @@ const updateNote = async ({
   if (noteAlreadyExists) {
     const { _id } = noteAlreadyExists;
 
-    return await UserModel.updateOne(
+    const response = await UserModel.updateOne(
       {
         _id,
+        "notes.id": id,
       },
       {
         $set: {
           "notes.$.description": data.description,
+          "notes.$.important": data.important,
         },
       },
       {
@@ -62,6 +63,7 @@ const updateNote = async ({
         new: true,
       }
     );
+    console.log(response);
   } else {
     return "NOTE_NOT_FOUND";
   }

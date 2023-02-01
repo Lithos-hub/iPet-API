@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import handleHttp from "../utils/error.handle";
 import * as NoteService from "../services/note.service";
 import { ExtendedRequest } from "../interfaces/request.interface";

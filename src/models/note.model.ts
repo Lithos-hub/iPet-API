@@ -8,6 +8,11 @@ const NoteSchema = new Schema<Note>(
       type: String,
       trim: true,
     },
+    important: {
+      required: false,
+      type: Boolean,
+      default: false,
+    },
     userId: {
       required: true,
       type: String,

@@ -4,7 +4,7 @@ import { Pet } from "../interfaces/pet.interface";
 import UserModel from "../models/user.model";
 
 const createPet = async (_id: ObjectId, data: Pet) => {
-  return await UserModel.findOneAndUpdate(
+  const createdPet = await UserModel.findOneAndUpdate(
     {
       _id,
     },
@@ -15,8 +15,13 @@ const createPet = async (_id: ObjectId, data: Pet) => {
           id: new Date().getTime(),
         },
       },
+    },
+    {
+      new: true,
     }
   );
+
+  return createdPet?.pets.at(-1);
 };
 
 const getPetDetails = async ({
