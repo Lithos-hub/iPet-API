@@ -12,6 +12,7 @@ const createPet = async (_id: ObjectId, data: Pet) => {
       $push: {
         pets: {
           ...data,
+          createdAt: new Date(),
           id: new Date().getTime(),
         },
       },
