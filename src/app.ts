@@ -4,6 +4,9 @@ import morgan from "morgan";
 import cors from "cors";
 import db from "./config/mongo";
 import router from "./routes";
+import mongoose from "mongoose";
+
+mongoose.set('strictQuery', false);
 
 // init
 const app = express();
